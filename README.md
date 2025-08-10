@@ -4,11 +4,15 @@
 
 CrisisSim is a Model Context Protocol (MCP) server that simulates real-world crisis situations and allows users to make decisions to see updated outcomes. Perfect for emergency response training, hackathon projects, and AI integration.
 
+## 🚀 Render Deployment Ready
+
+This repository is configured for easy deployment on Render.com. See [RENDER_DEPLOYMENT_GUIDE.md](RENDER_DEPLOYMENT_GUIDE.md) for detailed instructions.
+
 ## ✨ Features
 
 - 🎯 **Realistic Crisis Scenarios**: Generate detailed crisis situations with roles and actions
 - 🔄 **Interactive Decision Making**: Make decisions and see realistic consequences
-- 🤖 **AI-Powered**: Uses OpenAI GPT-4o-mini for dynamic scenario generation
+- 🤖 **AI-Powered**: Uses Google Gemini API for dynamic scenario generation
 - 🛡️ **Fallback System**: Works even without API access using template generation
 - 📊 **Session Management**: Track scenarios and decisions across sessions
 - 🔧 **MCP Protocol**: Full Model Context Protocol compliance
@@ -18,7 +22,7 @@ CrisisSim is a Model Context Protocol (MCP) server that simulates real-world cri
 
 ### Prerequisites
 - Python 3.11+
-- OpenAI API key (optional, for enhanced functionality)
+- Google Gemini API key (optional, for enhanced functionality)
 
 ### Installation
 ```bash
@@ -29,17 +33,14 @@ cd crisissim-mcp-server
 # Install dependencies
 pip install -r requirements.txt
 
-# Set your OpenAI API key (optional)
-export OPENAI_API_KEY="your-openai-api-key-here"
+# Set your Gemini API key (optional)
+export GEMINI_API_KEY="your-gemini-api-key-here"
 ```
 
 ### Run the Server
 ```bash
-# Production version (recommended)
-python server_production.py
-
-# Hybrid version (tries API first, falls back to template)
-python server_hybrid.py
+# Gemini version (recommended)
+python server_gemini.py
 
 # Fallback version (no API needed)
 python server_fallback.py
@@ -48,10 +49,10 @@ python server_fallback.py
 ### Test the Server
 ```bash
 # Test all functionality
-python test_hybrid.py
+python gemini_demo.py --auto
 
 # Interactive demo
-python hybrid_demo.py
+python gemini_demo.py
 ```
 
 ## 🎯 Usage
@@ -95,7 +96,7 @@ docker build -t crisissim-mcp-server .
 # Run with environment variables
 docker run -d \
   --name crisissim-mcp \
-  -e OPENAI_API_KEY="your-api-key-here" \
+  -e GEMINI_API_KEY="your-api-key-here" \
   -p 8000:8000 \
   crisissim-mcp-server
 ```

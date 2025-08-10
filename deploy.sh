@@ -37,7 +37,7 @@ check_files() {
     print_status "Checking required files..."
     
     required_files=(
-        "server_production.py"
+        "server_gemini.py"
         "requirements.txt"
         "manifest.json"
         "Dockerfile"
@@ -67,13 +67,13 @@ test_server() {
         pip install -r requirements.txt
     fi
     
-    # Test the production server
+    # Test the Gemini server
     if timeout 10s python -c "
 import asyncio
 import sys
 import os
 sys.path.insert(0, '.')
-from server_production import generate_scenario, next_step
+from server_gemini import generate_scenario, next_step
 
 async def test():
     try:
@@ -146,7 +146,7 @@ deploy_render() {
     echo "2. Go to https://render.com and create a new Web Service"
     echo "3. Connect your GitHub repository"
     echo "4. Set environment variables:"
-    echo "   - OPENAI_API_KEY: your-openai-api-key"
+    echo "   - GEMINI_API_KEY: your-gemini-api-key"
     echo "5. Deploy!"
 }
 
@@ -161,7 +161,7 @@ deploy_railway() {
 builder = "nixpacks"
 
 [deploy]
-startCommand = "python server_production.py"
+startCommand = "python server_gemini.py"
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
