@@ -1,0 +1,47 @@
+{
+  "name": "CrisisSim",
+  "version": "1.0.0",
+  "description": "An AI-driven crisis scenario simulator",
+  "tools": [
+    {
+      "name": "generateScenario",
+      "description": "Generate a new crisis scenario with roles and initial actions",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "crisis_type": {
+            "type": "string",
+            "description": "Type of crisis (e.g., natural disaster, terrorist attack, pandemic, etc.)"
+          },
+          "location": {
+            "type": "string",
+            "description": "Location where the crisis occurs"
+          },
+          "people_count": {
+            "type": "integer",
+            "description": "Number of people affected by the crisis"
+          }
+        },
+        "required": ["crisis_type", "location", "people_count"]
+      }
+    },
+    {
+      "name": "nextStep",
+      "description": "Get the next step in the crisis scenario based on a decision",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Session ID from the previous scenario"
+          },
+          "decision": {
+            "type": "string",
+            "description": "The decision made by the user"
+          }
+        },
+        "required": ["session_id", "decision"]
+      }
+    }
+  ]
+}
