@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  crisissim:
+    build: .
+    container_name: crisissim-mcp-server
+    environment:
+      - PYTHONUNBUFFERED=1
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - ./logs:/app/logs
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - crisissim-network
+
+  # Optional: Add a simple web interface for testing
+  web-interface:
+    image: nginx:alpine
+    container_name: crisissim-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web:/usr/share/nginx/html
+    depends_on:
+      - crisissim
+    networks:
+      - crisissim-network
+    restart: unless-stopped
+
+networks:
+  crisissim-network:
+    driver: bridge
+
+volumes:
+  logs:

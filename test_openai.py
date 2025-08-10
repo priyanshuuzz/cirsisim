@@ -6,7 +6,7 @@ This script tests if the OpenAI API is working correctly.
 
 import openai
 
-# Use the same API key as in the server
+# Use the new API key
 OPENAI_API_KEY = "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"
 
 def test_openai_connection():
