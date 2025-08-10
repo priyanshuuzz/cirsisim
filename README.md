@@ -30,7 +30,7 @@ cd crisissim-mcp-server
 pip install -r requirements.txt
 
 # Set your OpenAI API key (optional)
-export OPENAI_API_KEY="your-api-key-here"
+export OPENAI_API_KEY="your-openai-api-key-here"
 ```
 
 ### Run the Server
