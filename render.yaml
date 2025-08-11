@@ -1,16 +1,9 @@
 services:
   - type: web
     name: crisissim-mcp-server
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python server_gemini.py
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.0
-      - key: GEMINI_API_KEY
-        sync: false  # Set this in Render dashboard
-      - key: HTTP_SERVER
-        value: true
-    healthCheckPath: /
-    autoDeploy: true
-    plan: free  # Change to paid plan for production
+      - key: NODE_ENV
+        value: production
