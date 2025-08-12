@@ -89,7 +89,7 @@ async def handle_list_tools() -> ListToolsResult:
                         },
                         "location": {
                             "type": "string",
-                            "description": "Location where the crisis occurs"
+                            "description": "Location where the Crisis occurs"
                         },
                         "people_count": {
                             "type": "integer",
@@ -188,7 +188,7 @@ async def generate_scenario(arguments: Dict[str, Any]) -> CallToolResult:
             )
             
             # Create the prompt
-            prompt = f"""Generate a realistic crisis scenario with the following details:
+            prompt = f"""Generate a realistic Crisis scenario with the following details:
 - Crisis Type: {crisis_type}
 - Location: {location}
 - People Affected: {people_count}
@@ -201,7 +201,7 @@ Please provide a 4-6 sentence scenario that includes:
 Make it realistic and engaging for crisis simulation training."""
             
             # Generate content
-            system_instruction = "You are a crisis simulation expert. Generate realistic, detailed crisis scenarios for training purposes."
+            system_instruction = "You are a Crisis simulation expert. Generate realistic, detailed Crisis scenarios for training purposes."
             response = model.generate_content(
                 [
                     {"role": "user", "parts": [system_instruction, prompt]}
@@ -296,7 +296,7 @@ Based on this decision, provide an updated scenario that includes:
 Keep it realistic and maintain the same level of detail (4-6 sentences)."""
             
             # Generate content
-            system_instruction = "You are a crisis simulation expert. Provide realistic consequences and next steps based on user decisions."
+            system_instruction = "You are a Crisis simulation expert. Provide realistic consequences and next steps based on user decisions."
             response = model.generate_content(
                 [
                     {"role": "user", "parts": [system_instruction, prompt]}
@@ -367,6 +367,7 @@ async def main():
         # Import HTTP server modules
         try:
             from mcp.server.http import http_server
+            from mcp.server.models import NotificationOptions
             logger.info(f"Starting HTTP server on port {PORT}")
             
             # Run the server in HTTP mode
@@ -376,7 +377,7 @@ async def main():
                     server_name="CrisisSim",
                     server_version="1.0.0",
                     capabilities=server.get_capabilities(
-                        notification_options=None,
+                        notification_options=NotificationOptions(tools_changed=True),
                         experimental_capabilities=None,
                     ),
                 ),
@@ -393,6 +394,7 @@ async def main():
 
 async def run_stdio_server():
     """Run the server in stdio mode."""
+    from mcp.server.models import NotificationOptions
     async with stdio_server() as (read_stream, write_stream):
         await server.run(
             read_stream,
@@ -401,7 +403,7 @@ async def run_stdio_server():
                 server_name="CrisisSim",
                 server_version="1.0.0",
                 capabilities=server.get_capabilities(
-                    notification_options=None,
+                    notification_options=NotificationOptions(tools_changed=True),
                     experimental_capabilities=None,
                 ),
             ),
