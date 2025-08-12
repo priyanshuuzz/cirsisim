@@ -1,0 +1,24 @@
+{
+  "name": "crisissim-mcp-server",
+  "version": "1.0.0",
+  "description": "AI-Powered Real-World Crisis Simulator for Emergency Training",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'Build complete'",
+    "test": "node test.js"
+  },
+  "keywords": ["crisis", "simulation", "emergency", "training", "ai", "mcp"],
+  "author": "CrisisSim Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "uuid": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

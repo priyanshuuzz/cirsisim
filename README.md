@@ -1,291 +1,199 @@
-# CrisisSim MCP Server
+# 🌍 CrisisSim - AI-Powered Real-World Crisis Simulator
 
-## 🚨 AI-Driven Crisis Scenario Simulator
+## 🏆 Puch AI Hackathon Project
 
-CrisisSim is a Model Context Protocol (MCP) server that simulates real-world crisis situations and allows users to make decisions to see updated outcomes. Perfect for emergency response training, hackathon projects, and AI integration.
+**Problem:** Governments, schools, companies need emergency drills (fire, earthquake, cyberattack, flood), but real drills are costly, time-consuming, and impractical.
 
-## 🚀 Render Deployment Ready
+**Solution:** A real-time AI crisis simulation generator that creates personalized, environment-adaptive emergency scenarios with role-based instructions.
 
-This repository is configured for easy deployment on Render.com. See [RENDER_DEPLOYMENT_GUIDE.md](RENDER_DEPLOYMENT_GUIDE.md) for detailed instructions.
+## 🚀 Live Demo
 
-## ✨ Features
+**Server URL:** `https://your-render-url.com` or `https://your-netlify-url.com`
 
-- 🎯 **Realistic Crisis Scenarios**: Generate detailed crisis situations with roles and actions
-- 🔄 **Interactive Decision Making**: Make decisions and see realistic consequences
-- 🤖 **AI-Powered**: Uses Google Gemini API for dynamic scenario generation
-- 🛡️ **Fallback System**: Works even without API access using template generation
-- 📊 **Session Management**: Track scenarios and decisions across sessions
-- 🔧 **MCP Protocol**: Full Model Context Protocol compliance
-- 🚀 **Production Ready**: Docker, cloud deployment, and monitoring support
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.11+
-- Google Gemini API key (optional, for enhanced functionality)
-
-### Installation
+### Quick Test:
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/crisissim-mcp-server.git
-cd crisissim-mcp-server
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set your Gemini API key (optional)
-export GEMINI_API_KEY="your-gemini-api-key-here"
+curl -X POST https://your-server-url.com/generate-scenario \
+  -H "Content-Type: application/json" \
+  -d '{
+    "location": "Mumbai Office Building",
+    "buildingType": "high-rise",
+    "teamSize": 8,
+    "crisisType": "earthquake"
+  }'
 ```
 
-### Run the Server
-```bash
-# Gemini version (recommended)
-python server_gemini.py
+## 🎯 Key Features
 
-# Fallback version (no API needed)
-python server_fallback.py
-```
+### 1. Environment-Adaptive Scenarios
+- User provides location + building type + available resources
+- AI generates hyper-realistic scenarios based on environment
+- Real-time adaptation to user's specific situation
 
-### Test the Server
-```bash
-# Test all functionality
-python gemini_demo.py --auto
+### 2. Multi-Person Role Assignment
+- Each team member gets unique instructions (leader, medic, communicator, scout)
+- Role-based decision making with consequences
+- Scalable from 2 to 50+ people
 
-# Interactive demo
-python gemini_demo.py
-```
+### 3. Dynamic Crisis Evolution
+- Scenarios evolve in real-time based on decisions
+- Realistic consequences and complications
+- Live instruction updates as situation changes
 
-## 🎯 Usage
+### 4. Multiple Crisis Types
+- 🏢 **Earthquake** - Building collapse, aftershocks, debris
+- 🔥 **Fire Emergency** - Smoke, blocked exits, evacuation
+- 🌊 **Flash Flood** - Rising water, evacuation routes
+- 💻 **Cyber Attack** - Ransomware, data breach response
+- 🦠 **Pandemic** - Isolation protocols, health screening
 
-### Generate a Crisis Scenario
-```json
+## 📊 Analytics Dashboard
+
+Real-time usage statistics for hackathon ranking:
+- Total users who started simulations
+- Active simulations running
+- Completed scenarios
+- Popular crisis types
+
+**Analytics Endpoint:** `GET /analytics`
+
+## 🔧 API Endpoints
+
+### Generate New Scenario
+```http
+POST /generate-scenario
+Content-Type: application/json
+
 {
-  "crisis_type": "natural disaster",
-  "location": "Mumbai",
-  "people_count": 5000
+  "location": "Delhi School Building",
+  "buildingType": "school",
+  "teamSize": 12,
+  "crisisType": "fire"
 }
 ```
 
-### Make a Decision
-```json
+### Process Next Step
+```http
+POST /next-step
+Content-Type: application/json
+
 {
-  "session_id": "uuid-from-previous-call",
-  "decision": "Evacuate all buildings in the affected area"
-}
-```
-
-## 🐳 Docker Deployment
-
-### Quick Docker Setup
-```bash
-# Build and run with Docker Compose
-docker-compose up -d
-
-# Check status
-docker-compose ps
-
-# View logs
-docker-compose logs -f crisissim
-```
-
-### Manual Docker Build
-```bash
-# Build the image
-docker build -t crisissim-mcp-server .
-
-# Run with environment variables
-docker run -d \
-  --name crisissim-mcp \
-  -e GEMINI_API_KEY="your-api-key-here" \
-  -p 8000:8000 \
-  crisissim-mcp-server
-```
-
-## ☁️ Cloud Deployment
-
-### Render (Recommended)
-1. Push your code to GitHub
-2. Go to [Render Dashboard](https://dashboard.render.com)
-3. Create new Web Service
-4. Connect your repository
-5. Set environment variables
-6. Deploy!
-
-### Railway
-```bash
-# Install Railway CLI
-npm install -g @railway/cli
-
-# Deploy
-railway login
-railway init
-railway variables set OPENAI_API_KEY="your-api-key-here"
-railway up
-```
-
-### Other Platforms
-- **Heroku**: `git push heroku main`
-- **DigitalOcean App Platform**: Connect GitHub repo
-- **AWS/GCP**: Use Docker deployment
-
-## 🔧 Configuration
-
-### Environment Variables
-- `OPENAI_API_KEY`: Your OpenAI API key (optional)
-- `LOG_LEVEL`: Set to `DEBUG`, `INFO`, `WARNING`, or `ERROR` (default: `INFO`)
-- `PORT`: Port to run the server on (default: 8000)
-
-### MCP Integration
-```json
-{
-  "mcpServers": {
-    "crisissim": {
-      "command": "python",
-      "args": ["server_production.py"],
-      "cwd": "/path/to/crisissim"
-    }
+  "scenarioId": "uuid-here",
+  "action": "Evacuate through east stairwell",
+  "roleDecisions": {
+    "leader": "Guide students to assembly point",
+    "medic": "Check for injuries during evacuation"
   }
 }
 ```
 
-## 📁 Project Structure
-
-```
-crisissim-mcp-server/
-├── server_production.py      # Production server (recommended)
-├── server_hybrid.py          # Hybrid server (API + fallback)
-├── server_fallback.py        # Fallback server (no API needed)
-├── server.py                 # Full API server
-├── manifest.json             # MCP manifest
-├── requirements.txt          # Python dependencies
-├── Dockerfile               # Docker configuration
-├── docker-compose.yml       # Docker Compose setup
-├── render.yaml              # Render deployment config
-├── deploy.sh                # Linux/Mac deployment script
-├── deploy.bat               # Windows deployment script
-├── test_hybrid.py           # Test script
-├── hybrid_demo.py           # Interactive demo
-├── README.md                # This file
-├── DEPLOYMENT_GUIDE.md      # Detailed deployment guide
-├── FINAL_SETUP.md           # Setup guide
-└── .gitignore               # Git ignore rules
+### Check Scenario Status
+```http
+GET /scenario/{scenarioId}
 ```
 
-## 🧪 Testing
+### Health Check
+```http
+GET /health
+```
 
-### Automated Tests
+## 🏗️ Deployment
+
+### Option 1: Render
+1. Connect GitHub repo to Render
+2. Set build command: `npm install`
+3. Set start command: `npm start`
+4. Deploy automatically
+
+### Option 2: Netlify
+1. Build command: `npm run build`
+2. Publish directory: `public`
+3. Functions directory: `netlify/functions`
+
+### Environment Variables
+```
+PORT=3000
+NODE_ENV=production
+```
+
+## 🎮 Usage Examples
+
+### For Schools
+```javascript
+{
+  "location": "Delhi Public School, 3-story building",
+  "buildingType": "school",
+  "teamSize": 15,
+  "crisisType": "earthquake"
+}
+```
+
+### For Offices
+```javascript
+{
+  "location": "Gurgaon IT Park, Tower B",
+  "buildingType": "high-rise",
+  "teamSize": 25,
+  "crisisType": "fire"
+}
+```
+
+### For Hospitals
+```javascript
+{
+  "location": "AIIMS Delhi, Emergency Wing",
+  "buildingType": "hospital",
+  "teamSize": 30,
+  "crisisType": "pandemic"
+}
+```
+
+## 🏆 Why Judges Will Love It
+
+1. **Live Interactive Demo** - Real crisis simulation on stage
+2. **Social Impact** - Improves disaster preparedness
+3. **AI Innovation** - Beyond text generation, real situational intelligence
+4. **Scalability** - Schools, corporates, military, government contracts
+5. **Revenue Model** - SaaS + government contracts
+
+## 📈 Market Opportunity
+
+- **Schools:** 1.5M schools in India need regular drills
+- **Corporates:** 40M+ employees need emergency training
+- **Government:** Disaster management agencies
+- **International:** Global emergency preparedness market
+
+## 🔥 Competitive Advantage
+
+- First AI-driven, fully personalized crisis simulator
+- Real-time scenario evolution (not pre-scripted)
+- Multi-crisis, multi-environment support
+- Role-based team coordination
+- Instant deployment and scaling
+
+## 🚀 Getting Started
+
+1. **Clone & Install:**
 ```bash
-# Test hybrid functionality
-python test_hybrid.py
-
-# Test fallback functionality
-python test_fallback.py
-
-# Test OpenAI integration
-python test_openai.py
+git clone <repo-url>
+cd crisissim
+npm install
+npm start
 ```
 
-### Manual Testing
-```bash
-# Interactive demo
-python hybrid_demo.py
+2. **Test Locally:**
+Visit `http://localhost:3000`
 
-# Simple demo
-python simple_demo.py
-```
+3. **Deploy:**
+Push to GitHub → Connect to Render/Netlify → Auto-deploy
 
-## 📊 Monitoring
-
-### Local Monitoring
-```bash
-# View logs
-tail -f crisissim.log
-
-# Check server status
-curl http://localhost:8000/health
-```
-
-### Cloud Monitoring
-- **Render**: Built-in logging and monitoring
-- **Railway**: Real-time logs in dashboard
-- **Heroku**: `heroku logs --tail`
-
-## 🔒 Security
-
-- ✅ API keys stored in environment variables
-- ✅ Non-root user in Docker containers
-- ✅ Input validation and sanitization
-- ✅ Automatic session cleanup
-- ✅ Error handling and logging
-
-## 🚨 Troubleshooting
-
-### Common Issues
-
-#### API Key Problems
-```bash
-# Check if API key is set
-echo $OPENAI_API_KEY
-
-# Set API key
-export OPENAI_API_KEY="your-key-here"
-```
-
-#### Dependencies Issues
-```bash
-# Reinstall dependencies
-pip install -r requirements.txt --force-reinstall
-```
-
-#### Port Conflicts
-```bash
-# Find process using port
-lsof -i :8000
-
-# Kill process
-kill -9 <PID>
-```
-
-### Getting Help
-- Check logs: `tail -f crisissim.log`
-- Test locally: `python server_production.py`
-- Verify environment: `python -c "import mcp, openai; print('OK')"`
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🎉 Acknowledgments
-
-- Built with the Model Context Protocol (MCP)
-- Powered by OpenAI GPT-4o-mini
-- Designed for emergency response training
+4. **Share:**
+Share your deployment URL for maximum hackathon usage!
 
 ## 📞 Support
 
-- **Issues**: Create an issue on GitHub
-- **Documentation**: Check the guides in this repository
-- **Deployment**: See `DEPLOYMENT_GUIDE.md`
+For hackathon support or questions:
+- Demo: `/demo` endpoint
+- Analytics: `/analytics` endpoint
+- Health: `/health` endpoint
 
-## 🎊 Success Story
-
-**"Aapka CrisisSim MCP server ab production-ready hai!"** 🚀
-
-Your CrisisSim server is now:
-- ✅ **Fully functional** with OpenAI API integration
-- ✅ **Always working** with fallback system
-- ✅ **Production ready** with Docker and cloud deployment
-- ✅ **MCP compliant** for AI integration
-- ✅ **Hackathon ready** for demos and presentations
-
----
-
-**Made with ❤️ for emergency response training and AI innovation**
+**Built for Puch AI Hackathon 2024** 🏆

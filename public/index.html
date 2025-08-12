@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrisisSim - AI-Powered Crisis Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .simulator {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .scenario-result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .crisis-type {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .roles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .role-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e1e5e9;
+        }
+        
+        .role-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hackathon-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff6b6b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            z-index: 1000;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .hackathon-badge {
+                position: static;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hackathon-badge">
+        🏆 Puch AI Hackathon
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🌍 CrisisSim</h1>
+            <p>AI-Powered Real-World Crisis Simulator for Emergency Training</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalUsers">0</div>
+                <div>Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeSimulations">0</div>
+                <div>Active Simulations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completedScenarios">0</div>
+                <div>Completed Scenarios</div>
+            </div>
+        </div>
+        
+        <div class="simulator">
+            <h2>🚨 Start Crisis Simulation</h2>
+            <form id="simulatorForm">
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" placeholder="e.g., Mumbai Office Building, Delhi School" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="buildingType">Building Type</label>
+                    <select id="buildingType" required>
+                        <option value="">Select building type</option>
+                        <option value="office">Office Building</option>
+                        <option value="school">School</option>
+                        <option value="hospital">Hospital</option>
+                        <option value="high-rise">High-rise Building</option>
+                        <option value="mall">Shopping Mall</option>
+                        <option value="residential">Residential Complex</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="teamSize">Team Size</label>
+                    <input type="number" id="teamSize" min="2" max="50" value="5" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="crisisType">Crisis Type</label>
+                    <select id="crisisType" required>
+                        <option value="">Select crisis type</option>
+                        <option value="earthquake">🏢 Earthquake</option>
+                        <option value="fire">🔥 Building Fire</option>
+                        <option value="flood">🌊 Flash Flood</option>
+                        <option value="cyberattack">💻 Cyber Attack</option>
+                        <option value="pandemic">🦠 Pandemic Outbreak</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn">🚀 Start Crisis Simulation</button>
+            </form>
+            
+            <div id="result" class="scenario-result" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Load analytics
+        async function loadAnalytics() {
+            try {
+                const response = await fetch('/analytics');
+                const data = await response.json();
+                document.getElementById('totalUsers').textContent = data.totalUsers;
+                document.getElementById('activeSimulations').textContent = data.activeSimulations;
+                document.getElementById('completedScenarios').textContent = data.completedScenarios;
+            } catch (error) {
+                console.error('Failed to load analytics:', error);
+            }
+        }
+        
+        // Handle form submission
+        document.getElementById('simulatorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                location: document.getElementById('location').value,
+                buildingType: document.getElementById('buildingType').value,
+                teamSize: parseInt(document.getElementById('teamSize').value),
+                crisisType: document.getElementById('crisisType').value
+            };
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Generating crisis scenario...</p>
+                </div>
+            `;
+            
+            try {
+                const response = await fetch('/generate-scenario', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayScenario(data.scenario);
+                    loadAnalytics(); // Refresh stats
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Failed to generate scenario: ${error.message}</p>`;
+            }
+        });
+        
+        function displayScenario(scenario) {
+            const resultDiv = document.getElementById('result');
+            
+            let rolesHtml = '';
+            Object.entries(scenario.personalizedInstructions).forEach(([person, data]) => {
+                rolesHtml += `
+                    <div class="role-card">
+                        <div class="role-title">${person.replace('_', ' ').toUpperCase()} - ${data.role.toUpperCase()}</div>
+                        <div>${data.instruction}</div>
+                    </div>
+                `;
+            });
+            
+            resultDiv.innerHTML = `
+                <div class="crisis-type">${scenario.severity} PRIORITY</div>
+                <h3>🚨 ${scenario.name}</h3>
+                <p><strong>Location:</strong> ${scenario.location}</p>
+                <p><strong>Building:</strong> ${scenario.buildingType}</p>
+                <p><strong>Time Limit:</strong> ${scenario.timeLimit}</p>
+                <p><strong>Scenario ID:</strong> <code>${scenario.id}</code></p>
+                
+                <div style="margin: 20px 0; padding: 15px; background: #fff3cd; border-radius: 8px;">
+                    <strong>🎯 Situation:</strong> ${scenario.description}
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <strong>⚡ Immediate Actions:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        ${scenario.initialActions.map(action => `<li>${action}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <strong>👥 Role Assignments:</strong>
+                    <div class="roles">${rolesHtml}</div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: #d1ecf1; border-radius: 8px;">
+                    <strong>🔗 API Integration:</strong><br>
+                    Use scenario ID <code>${scenario.id}</code> with Puch AI MCP tools:<br>
+                    • <code>POST /next-step</code> - Process decisions<br>
+                    • <code>GET /scenario/${scenario.id}</code> - Check status
+                </div>
+            `;
+        }
+        
+        // Load analytics on page load
+        loadAnalytics();
+        
+        // Refresh analytics every 30 seconds
+        setInterval(loadAnalytics, 30000);
+    </script>
+</body>
+</html>
